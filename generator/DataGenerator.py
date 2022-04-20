@@ -63,7 +63,8 @@ class DataGenerator(tf.keras.utils.Sequence):
             # add this child to its parent's child list
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
-            nodes.append(self.embeddings[self.embedding_lookup[node['node']]])
+            #nodes.append(self.embeddings[self.embedding_lookup[node['node']]])
+            nodes.append(self.__onehot(self.embedding_lookup[node['node']], len(self.embedding_lookup)))
 
         return nodes, children, label
 
