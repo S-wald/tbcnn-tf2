@@ -10,9 +10,10 @@ class Tbcnn(tf.keras.Model):
         self.conv_layer = ContinuousBinaryTreeConvLayer(embedding_size, conv_output_size)
         self.pooling_layer = DynamicMaxPoolingLayer()
         self.classifier = tf.keras.layers.Dense(num_classes, activation='softmax')
+        self.argmax = None
 
     def call(self, inputs):
         x = self.conv_layer([inputs[0], inputs[1]])
-        x = self.pooling_layer(x)
+        self.argmax, x = self.pooling_layer(x)
         return self.classifier(x)
 

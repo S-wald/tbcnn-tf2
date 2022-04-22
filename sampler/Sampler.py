@@ -34,9 +34,9 @@ class Sampler:
         self.train_df = pd.concat(train_dfs, ignore_index=True)
         self.val_df = pd.concat(val_dfs, ignore_index=True)
         self.test_df = pd.concat(test_dfs, ignore_index=True)
-        #self.train_df.to_csv(os.path.join(self.train_dir, "train.csv"))
-        #self.val_df.to_csv(os.path.join(self.val_dir, "val.csv"))
-        #self.test_df.to_csv(os.path.join(self.test_dir, "test.csv"))
+        self.train_df.to_csv(os.path.join(self.train_dir, "train.csv"))
+        self.val_df.to_csv(os.path.join(self.val_dir, "val.csv"))
+        self.test_df.to_csv(os.path.join(self.test_dir, "test.csv"))
         return problem_ids
 
     def create_trees(self):

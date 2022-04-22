@@ -30,7 +30,6 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
             np.random.shuffle(self.indexes)
 
     def __getitem__(self, index):
-        print(index)
         'Generate one batch of data'
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
         batch_of_files = [self.file_paths[i] for i in indexes]
