@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 import pickle
+from natsort import natsorted
 
 
 class ProblemIdClassificationDataset:
@@ -92,13 +93,13 @@ class ProblemIdClassificationDataset:
             pickle.dump(self.__node_map, f)
 
     def get_train_files(self):
-        return glob.glob(self.__train_dir + "\\*.pkl")
+        return natsorted(glob.glob(self.__train_dir + "\\*.pkl"))
 
     def get_val_files(self):
-        return glob.glob(self.__val_dir + "\\*.pkl")
+        return natsorted(glob.glob(self.__val_dir + "\\*.pkl"))
 
     def get_test_files(self):
-        return glob.glob(self.__test_dir + "\\*.pkl")
+        return natsorted(glob.glob(self.__test_dir + "\\*.pkl"))
 
     def get_labels(self):
         return self.__labels
