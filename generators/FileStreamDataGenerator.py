@@ -4,20 +4,21 @@ import ast
 import pickle
 
 class FileStreamDataGenerator(tf.keras.utils.Sequence):
-    def __init__(self, file_paths, labels,
-                 embeddings, embedding_lookup,
-                 batch_size=32, shuffle=True):
+    def __init__(self, file_paths, labels, node_map,
+                 batch_size=32, shuffle=True,
+                 node_embeddings=None):
         self.file_paths = file_paths
         self.labels = labels
-        self.n_classes = len(labels)
-        self.embeddings = embeddings
-        self.embedding_lookup = embedding_lookup
+        self.n_labels = len(labels)
+        self.label_lookup = {label: self.__onehot(i, self.n_labels) for i, label in enumerate(labels)}
+        self.node_map = node_map
+        self.node_embeddings = node_embeddings
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.indexes = []
         self.on_epoch_end()
         self.shuffle = shuffle
-        self.label_lookup = {label: self.__onehot(i, self.n_classes) for i, label in enumerate(labels)}
+
 
     def __len__(self):
         'Denotes the number of batches per epoch'
@@ -70,8 +71,10 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
             # add this child to its parent's child list
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
-            #nodes.append(self.embeddings[self.embedding_lookup[node['node']]])
-            nodes.append(self.__onehot(self.embedding_lookup[node['node']], len(self.embedding_lookup)))
+            if self.node_embeddings is not None:
+                nodes.append(self.node_embeddings[self.node_map[node['node']]])
+            else:
+                nodes.append(self.__onehot(self.node_map[node['node']], len(self.node_map)))
 
         return nodes, children, label
 
