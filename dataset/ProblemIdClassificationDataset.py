@@ -27,7 +27,7 @@ class ProblemIdClassificationDataset:
 
     def create_or_load(self):
         if any(os.scandir(self.__location)):
-            self.load()
+            self.__load()
         else:
             self.__create()
 
@@ -35,19 +35,19 @@ class ProblemIdClassificationDataset:
         with open(os.path.join(self.__location, "dataset.pkl"), "rb") as f:
             self.__dataset = pickle.load(f)
 
-        with open(os.path.join(self.__location, "train_df.pkl"), "wb") as f:
+        with open(os.path.join(self.__location, "train_df.pkl"), "rb") as f:
             self.__train_df = pickle.load(f)
 
-        with open(os.path.join(self.__location, "val_df.pkl"), "wb") as f:
+        with open(os.path.join(self.__location, "val_df.pkl"), "rb") as f:
             self.__val_df = pickle.load(f)
 
-        with open(os.path.join(self.__location, "test_df.pkl"), "wb") as f:
+        with open(os.path.join(self.__location, "test_df.pkl"), "rb") as f:
             self.__test_df = pickle.load(f)
 
-        with open(os.path.join(self.__location, "labels.pkl"), "wb") as f:
+        with open(os.path.join(self.__location, "labels.pkl"), "rb") as f:
             self.__labels = pickle.load(f)
 
-        with open(os.path.join(self.__location, "node_map.pkl"), "wb") as f:
+        with open(os.path.join(self.__location, "node_map.pkl"), "rb") as f:
             self.__node_map = pickle.load(f)
 
     def __create(self):
