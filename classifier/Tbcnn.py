@@ -1,7 +1,7 @@
 import tensorflow as tf
 
-from classifier.ContinuousBinaryTreeConvLayer.ContinuousBinaryTreeConvLayer import ContinuousBinaryTreeConvLayer
-from classifier.DynamicMaxPoolingLayer.DynamicMaxPoolingLayer import DynamicMaxPoolingLayer
+from classifier.layers.ContinuousBinaryTreeConvLayer import ContinuousBinaryTreeConvLayer
+from classifier.layers.DynamicMaxPoolingLayer import DynamicMaxPoolingLayer
 
 
 class Tbcnn(tf.keras.Model):
