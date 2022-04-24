@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
-import ast
 import pickle
+
 
 class FileStreamDataGenerator(tf.keras.utils.Sequence):
     def __init__(self, file_paths, labels, node_map,
@@ -19,7 +19,6 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
         self.on_epoch_end()
         self.shuffle = shuffle
 
-
     def __len__(self):
         'Denotes the number of batches per epoch'
         return int(np.floor(len(self.file_paths) / self.batch_size))
@@ -32,7 +31,7 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        indexes = self.indexes[index * self.batch_size:(index + 1) * self.batch_size]
         batch_of_files = [self.file_paths[i] for i in indexes]
         X, Y = self.__data_generation(batch_of_files)
         return X, Y
@@ -98,3 +97,5 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
     def __onehot(self, i, total):
         return [1.0 if j == i else 0.0 for j in range(total)]
 
+    def get_label_lookup(self):
+        return self.label_lookup
