@@ -47,7 +47,7 @@ class ContinuousBinaryTreeConvLayer(tf.keras.layers.Layer):
         result = tf.tensordot(result, w, [[2, 3], [0, 1]])
 
         # output is (batch_size, max_tree_size, output_size)
-        return tf.nn.tanh(result + self.b, name='conv')
+        return tf.nn.relu(result + self.b, name='conv')
 
     def children_tensor(self, nodes, children):
         """Build the children tensor from the input nodes and child lookup."""
