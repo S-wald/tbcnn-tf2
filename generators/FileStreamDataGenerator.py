@@ -16,8 +16,9 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.indexes = []
-        self.on_epoch_end()
         self.shuffle = shuffle
+        self.on_epoch_end()
+
 
     def __len__(self):
         'Denotes the number of batches per epoch'
