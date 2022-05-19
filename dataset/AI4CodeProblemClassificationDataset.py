@@ -29,6 +29,9 @@ class AI4CodeProblemClassificationDataset:
         self.__test_files = []
 
     def create(self):
+        if any(os.scandir(self.__location)):
+            return
+
         self.__make_dirs()
         for problem_id in os.listdir(self.__src_location):
             samples = glob.glob(self.__src_location + "\\" + problem_id + "\\*.json")
