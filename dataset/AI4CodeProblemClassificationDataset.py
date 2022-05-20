@@ -34,6 +34,7 @@ class AI4CodeProblemClassificationDataset:
 
         self.__make_dirs()
         for problem_id in os.listdir(self.__src_location):
+            print(f"processing {problem_id} ...")
             samples = glob.glob(self.__src_location + "\\" + problem_id + "\\*.json")
             random.shuffle(samples)
             split = np.split(np.array(samples), [self.__train_split, self.__val_split, self.__test_split])
@@ -43,6 +44,7 @@ class AI4CodeProblemClassificationDataset:
             self.__create_trees(self.__train_files, self.__train_dir, problem_id)
             self.__create_trees(self.__val_files, self.__val_dir, problem_id)
             self.__create_trees(self.__test_files, self.__test_dir, problem_id)
+            print(f"... finished {problem_id}")
 
         self.__vocabulary_map = dict([(y, x + 1) for x, y in enumerate(sorted(self.__vocabulary))])
         with open(os.path.join(self.__location, "vocabulary_map.pkl"), "wb") as f:
@@ -67,9 +69,11 @@ class AI4CodeProblemClassificationDataset:
         n_nodes = 1
         queue = [tree]
         node_type = tree.get_type_rule_name()
-        self.__vocabulary.add(node_type)
+        node_label = tree.get_label()
+        node_term = node_type + node_label
+        self.__vocabulary.add(node_term)
         root_json = {
-            "node": node_type,
+            "node": node_term,
             "children": []
         }
         queue_json = [root_json]
@@ -82,9 +86,11 @@ class AI4CodeProblemClassificationDataset:
             queue.extend(children)
             for child in children:
                 node_type = child.get_type_rule_name()
-                self.__vocabulary.add(node_type)
+                node_label = child.get_label()
+                node_term = node_type + node_label
+                self.__vocabulary.add(node_term)
                 child_json = {
-                    "node": node_type,
+                    "node": node_term,
                     "children": []
                 }
 
