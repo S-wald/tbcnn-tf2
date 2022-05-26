@@ -7,7 +7,10 @@ class AI4CodeNode:
 
     @staticmethod
     def from_json(json_dict):
-        return AI4CodeNode(json_dict['id'], json_dict['type-rule-name'], json_dict['label'])
+        label = ""
+        if 'label' in json_dict:
+            label = json_dict['label']
+        return AI4CodeNode(json_dict['id'], json_dict['type-rule-name'], label)
 
     def get_children(self):
         return self.__children
