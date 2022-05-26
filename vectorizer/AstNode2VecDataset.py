@@ -12,6 +12,7 @@ class AstNode2VecDataset:
         self.__location = location
         self.__src_location = src_location
         self.__vocabulary = set()
+        self.__vocabulary.add("0") # padding symbol
         self.__vocabulary_map = None
         self.__submission_id_problem_id_map = {}
         self.__data_dir = os.path.join(self.__location, "data")
@@ -30,7 +31,7 @@ class AstNode2VecDataset:
         random.shuffle(samples)
         self.__gen_dataset(samples)
 
-        self.__vocabulary_map = dict([(y, x) for x, y in enumerate(sorted(self.__vocabulary))])
+        self.__vocabulary_map = dict([(y, x+1) for x, y in enumerate(sorted(self.__vocabulary))])
         with open(os.path.join(self.__location, "vocabulary_map.pkl"), "wb") as f:
             pickle.dump(self.__vocabulary_map, f)
 
