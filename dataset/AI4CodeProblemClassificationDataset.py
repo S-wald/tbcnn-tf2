@@ -10,8 +10,10 @@ from AI4Code.AI4CodeJsonObject import AI4CodeJsonObject
 
 languages = ["cpp14", "java8", "python3"]
 
+
 class AI4CodeProblemClassificationDataset:
-    def __init__(self, location, src_location, n_train_per_problem, n_val_per_problem, n_test_per_problem, sample_per_lang=False):
+    def __init__(self, location, src_location, n_train_per_problem, n_val_per_problem, n_test_per_problem,
+                 sample_per_lang=False):
         self.__location = location
         self.__src_location = src_location
         self.__n_samples_per_problem = n_train_per_problem + n_val_per_problem + n_test_per_problem
@@ -92,7 +94,7 @@ class AI4CodeProblemClassificationDataset:
         queue = [tree]
         node_type = tree.get_type_rule_name()
         node_label = tree.get_label()
-        node_term = node_type# + node_label
+        node_term = node_type  # + node_label
         self.__vocabulary.add(node_term)
         root_json = {
             "node": node_term,
@@ -109,7 +111,7 @@ class AI4CodeProblemClassificationDataset:
             for child in children:
                 node_type = child.get_type_rule_name()
                 node_label = child.get_label()
-                node_term = node_type# + node_label
+                node_term = node_type  # + node_label
                 self.__vocabulary.add(node_term)
                 child_json = {
                     "node": node_term,
