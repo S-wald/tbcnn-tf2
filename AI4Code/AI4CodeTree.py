@@ -40,7 +40,7 @@ class AI4CodeTree:
             ai4code_nodes.append(AI4CodeNode.from_json(node))
 
         for edge in ai4code_edges:
-            ai4code_nodes[edge.get_from() - 1].get_children().append(ai4code_nodes[edge.get_to() - 1])
+            ai4code_nodes[edge.get_from()].get_children().append(ai4code_nodes[edge.get_to()])
 
         graph_type = 'tree'
         if 'type' in json_dict:
