@@ -15,7 +15,7 @@ class ContinuousBinaryTreeConvLayer(tf.keras.layers.Layer):
         self.w_r = self.add_weight(
             shape=(feature_size, output_size), initializer="random_normal", trainable=True, name="w_r"
         )
-        self.b = self.add_weight(shape=(output_size,), initializer="random_normal", trainable=True)
+        self.b = self.add_weight(shape=(output_size,), initializer="random_normal", trainable=True, name="b")
 
     def call(self, inputs):
         # nodes is shape (batch_size x max_tree_size x feature_size)
