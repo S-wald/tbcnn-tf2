@@ -33,7 +33,6 @@ class AI4CodeProblemClassificationDataset:
         self.__test_files = []
 
         self.__invalid_samples = set()
-        self.__json_parse_errors = {}
 
     def create(self):
         if any(os.scandir(self.__location)):
@@ -71,23 +70,20 @@ class AI4CodeProblemClassificationDataset:
     def __create_trees(self, files, directory, label):
         for file in files:
             with open(file, encoding='utf-8') as src_file:
-                try:
-                    json_content = json.load(src_file)
-                    ai4code_obj = AI4CodeJsonObject.from_json(json_content)
-                    ai4code_tree = ai4code_obj.get_graph()
-                    tree = ai4code_tree.get_root_node()
-                    if ai4code_obj.get_graph().get_num_of_nodes() < 2:
-                        self.__invalid_samples.add(ai4code_tree.get_src_file())
-                        continue
-                    json_tree = self.__create_json_tree(tree)
-                    json_data = {'tree': json_tree,
-                                 'label': label}
-                    submission_id = os.path.basename(file).replace(".json", "")
-                    json_data_filepath = os.path.join(directory, submission_id + ".pkl")
-                    with open(json_data_filepath, 'wb') as out_file:
-                        pickle.dump(json_data, out_file)
-                except Exception as e:
-                    self.__json_parse_errors[file] = str(e)
+                json_content = json.load(src_file)
+                ai4code_obj = AI4CodeJsonObject.from_json(json_content)
+                ai4code_tree = ai4code_obj.get_graph()
+                tree = ai4code_tree.get_root_node()
+                if ai4code_obj.get_graph().get_num_of_nodes() < 2:
+                    self.__invalid_samples.add(ai4code_tree.get_src_file())
+                    continue
+                json_tree = self.__create_json_tree(tree)
+                json_data = {'tree': json_tree,
+                            'label': label}
+                submission_id = os.path.basename(file).replace(".json", "")
+                json_data_filepath = os.path.join(directory, submission_id + ".pkl")
+                with open(json_data_filepath, 'wb') as out_file:
+                    pickle.dump(json_data, out_file)
 
     def __create_json_tree(self, tree):
         n_nodes = 1
@@ -147,6 +143,3 @@ class AI4CodeProblemClassificationDataset:
 
     def get_invalid_samples(self):
         return self.__invalid_samples
-
-    def get_json_parse_errors(self):
-        return self.__json_parse_errors
