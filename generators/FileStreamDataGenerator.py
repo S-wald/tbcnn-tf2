@@ -4,7 +4,7 @@ import pickle
 
 
 class FileStreamDataGenerator(tf.keras.utils.Sequence):
-    def __init__(self, file_paths, labels, node_map,
+    def __init__(self, file_paths, labels, node_map=None,
                  batch_size=32, shuffle=True,
                  node_embeddings=None):
         self.file_paths = file_paths
@@ -72,9 +72,12 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
             if self.node_embeddings is not None:
-                nodes.append(self.node_embeddings[self.node_map[node['node']]])
+                if node['node'] in self.node_embeddings:
+                    nodes.append(self.node_embeddings[node['node']])
+                else:
+                    nodes.append([0.0]*60)
             else:
-                nodes.append(self.__onehot(self.node_map[node['node']], len(self.node_map)))
+                nodes.append(self.__onehot(self.node_map[node['node']], len(self.node_map)+1))
 
         return nodes, children, label
 

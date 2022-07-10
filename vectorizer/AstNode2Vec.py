@@ -2,17 +2,17 @@ import tensorflow as tf
 
 
 class AstNode2Vec(tf.keras.Model):
-    def __init__(self, feature_size, embedding_size, vocab_size):
+    def __init__(self, embedding_size, vocab_size):
         super(AstNode2Vec, self).__init__()
         self.w_l = self.add_weight(
-            shape=(embedding_size, embedding_size), initializer="ones", trainable=False, name="w_l"
+            shape=(embedding_size, vocab_size), initializer="random_normal", trainable=True, name="w_l"
         )
         self.w_r = self.add_weight(
-            shape=(embedding_size, embedding_size), initializer="ones", trainable=False, name="w_r"
+            shape=(embedding_size, vocab_size), initializer="random_normal", trainable=True, name="w_r"
         )
         self.target_embedding = tf.keras.layers.Embedding(vocab_size+1,
                                                           embedding_size,
-                                                          #initializer="random_normal",
+                                                          mask_zero=True,
                                                           name="target_embedding")
         self.b = self.add_weight(shape=(embedding_size,), initializer="zeros", trainable=False)
         self.classifier = tf.keras.layers.Dense(vocab_size, activation='softmax')
@@ -32,7 +32,8 @@ class AstNode2Vec(tf.keras.Model):
         context = tf.tensordot(cont_binary_node, w, [[1, 2], [0, 1]])
 
         result = context
-        return self.classifier(result)
+        return result
+        #return self.classifier(result)
 
     def eta_l(self, children):
         num_children = tf.shape(children)[1]
