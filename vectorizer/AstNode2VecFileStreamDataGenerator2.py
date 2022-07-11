@@ -33,25 +33,29 @@ class AstNode2VecFileStreamDataGenerator2(tf.keras.utils.Sequence):
 
     def __data_generation(self, samples):
         'Generates data containing batch_size samples'
-        b_context, b_target = [], []
+        b_context, b_parent_context, b_target = [], [], []
         for s in samples:
-            context, target = self.__gen_sample(s)
+            context, parent_context, target = self.__gen_sample(s)
             b_context.append(context)
+            b_parent_context.append(parent_context)
             b_target.append(target)
 
         b_context = \
             self.__pad_batch(b_context)
-        return np.array(b_context), np.array(b_target)
+        return [np.array(b_context), np.array(b_parent_context)], np.array(b_target)
 
     def __gen_sample(self, sample):
         context = []
-        target = self.__onehot(self.node_map[sample['target']], len(self.node_map)+1) 
-        # +1 because vocab is one-based as 0 is padding
+        parent_context = 0
+        target = self.__onehot(self.node_map[sample['target']], len(self.node_map)) 
         for c in sample['context']:
             context.append(self.node_map[c]) # use index for later embedding lookup
         if len(context) == 0:
             context.append(0)
-        return context, target
+        if sample["parent_context"] is not None:
+            p = sample["parent_context"]
+            parent_context = self.node_map[p]
+        return context, parent_context, target
 
     def __pad_batch(self, children):
         max_nodes = max([len(x) for x in children])
@@ -60,8 +64,7 @@ class AstNode2VecFileStreamDataGenerator2(tf.keras.utils.Sequence):
         return children
 
     def __onehot(self, i, total):
-        assert i < total
-        return [1.0 if j == i else 0.0 for j in range(total)]
+        return [1.0 if (j-1) == i else 0.0 for j in range(total)]
 
     def get_node_map(self):
         return self.node_map

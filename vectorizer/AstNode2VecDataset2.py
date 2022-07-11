@@ -20,18 +20,20 @@ class AstNode2VecDataset2:
 
     def __create_sample(self, tree):
         samples = []
-        queue = [tree["tree"]]
+        queue = [(tree["tree"], None)]
         while queue:
-            current_node = queue.pop(0)
+            (current_node, parent_node) = queue.pop(0)
             node_type = current_node["node"]
             self.__vocabulary.add(node_type)
+            parent_node_type = parent_node["node"] if parent_node is not None else None
             sample_json = {
                 "target": node_type,
-                "context": []
+                "context": [],
+                "parent_context": parent_node_type
             }
             children = current_node["children"]
-            queue.extend(children)
             for child in children:
+                queue.append((child, current_node))
                 child_node_type = child["node"]
                 sample_json["context"].append(child_node_type)
             samples.append(sample_json)
