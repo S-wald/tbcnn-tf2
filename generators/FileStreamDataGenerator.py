@@ -75,9 +75,9 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
                 if node['node'] in self.node_embeddings:
                     nodes.append(self.node_embeddings[node['node']])
                 else:
-                    nodes.append([0.0]*60)
+                    nodes.append([0.0]*80)
             else:
-                nodes.append(self.__onehot(self.node_map[node['node']], len(self.node_map)+1))
+                nodes.append(self.__onehot(self.node_map[node['node']]-1, len(self.node_map)))
 
         return nodes, children, label
 

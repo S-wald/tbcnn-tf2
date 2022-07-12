@@ -47,7 +47,7 @@ class AstNode2VecFileStreamDataGenerator2(tf.keras.utils.Sequence):
     def __gen_sample(self, sample):
         context = []
         parent_context = 0
-        target = self.__onehot(self.node_map[sample['target']], len(self.node_map)) 
+        target = self.__onehot(self.node_map[sample['target']]-1, len(self.node_map)) 
         for c in sample['context']:
             context.append(self.node_map[c]) # use index for later embedding lookup
         if len(context) == 0:
@@ -64,7 +64,7 @@ class AstNode2VecFileStreamDataGenerator2(tf.keras.utils.Sequence):
         return children
 
     def __onehot(self, i, total):
-        return [1.0 if (j-1) == i else 0.0 for j in range(total)]
+        return [1.0 if j == i else 0.0 for j in range(total)]
 
     def get_node_map(self):
         return self.node_map
