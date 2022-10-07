@@ -36,7 +36,7 @@ class AstNode2Vec(tf.keras.Model):
 
         cont_binary_node = tf.matmul(children, coef_reshape, transpose_a=True)
         w = tf.stack([self.w_l, self.w_r], axis=0)
-        child_context = tf.tensordot(cont_binary_node, w, [[1, 2], [0, 1]])
+        child_context = tf.tensordot(cont_binary_node, w, [[2, 1], [0, 1]])
         parent = tf.reshape(parent, (batch_size, self.embedding_size))
         parent_context = tf.matmul(parent, self.w_p)
         context = tf.stack([child_context, parent_context], 1)

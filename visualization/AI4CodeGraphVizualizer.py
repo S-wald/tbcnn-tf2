@@ -12,7 +12,7 @@ def visualize_ast(ast):
         node_label = node.get_label()
         if node_label:
             dot_node_label += " |" + node_label + "|"
-        dot.node(str(node_id), dot_node_label)
+        dot.node(str(node_id), "<<B>" + dot_node_label + "</B>>")
         queue.extend([(child, node_id) for child in node.get_children()])
         if parent_node_id > -1:
             dot.edge(str(parent_node_id), str(node_id), dir='none')

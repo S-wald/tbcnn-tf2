@@ -32,11 +32,12 @@ class AstNode2VecFileStreamDataGenerator(tf.keras.utils.Sequence):
         indexes = self.indexes[index * self.batch_size:(index + 1) * self.batch_size]
         batch_of_files = [self.samples[i] for i in indexes]
         X, Y = batch_of_files[0]
+        
         return X, Y
 
     def __data_generation(self, files):
         'Generates data containing batch_size samples'
-        b_nodes, b_children, b_labels = [], [], []
+        b_targets, b_children, b_labels = [], [], []
         trees = []
         for file in files:
             with open(file, 'rb') as f:
@@ -44,8 +45,8 @@ class AstNode2VecFileStreamDataGenerator(tf.keras.utils.Sequence):
                 trees.append(tree)
 
         for tree in trees:
-            nodes, children, label = self.__gen_sample(tree)
-            b_nodes.append(nodes)
+            target, children, label = self.__gen_sample(tree)
+            b_targets.append(target)
             b_children.append(children)
             b_labels.append(label)
 

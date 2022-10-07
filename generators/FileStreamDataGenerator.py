@@ -77,7 +77,11 @@ class FileStreamDataGenerator(tf.keras.utils.Sequence):
                 else:
                     nodes.append([0.0]*80)
             else:
-                nodes.append(self.__onehot(self.node_map[node['node']]-1, len(self.node_map)))
+                if node['node'] in self.node_map:
+                    nodes.append(self.__onehot(self.node_map[node['node']]-1, len(self.node_map)))
+                else:
+                    # UNK token vector -> all components zero
+                    nodes.append([0]*len(self.node_map))
 
         return nodes, children, label
 
