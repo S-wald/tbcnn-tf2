@@ -1,5 +1,6 @@
 from AI4Code.AI4CodeNode import AI4CodeNode
 from AI4Code.AI4CodeTree import AI4CodeTree
+import numpy as np
 
 
 class AI4CodeStatistics:
@@ -40,6 +41,8 @@ class AI4CodeStatistics:
                 queue.extend([(child, cur_depth+1) for child in children])
         __avg_leaf_depth = AI4CodeStatistics.avg(__leaf_depths)
         __avg_arity = AI4CodeStatistics.avg(__aritys)
-        return __num_nodes, __max_depth, __avg_leaf_depth, __max_arity, __avg_arity, __ast_vocab, __token_vocab
+        __median_leaf_depth = np.median(__leaf_depths)
+        __median_arity = np.median(__aritys)
+        return __num_nodes, __max_depth, __avg_leaf_depth, __max_arity, __avg_arity, __ast_vocab, __token_vocab, __median_leaf_depth, __median_arity
     
     
